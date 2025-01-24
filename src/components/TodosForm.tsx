@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Todo } from '../types/Todo';
 
 interface Props {
@@ -8,12 +7,12 @@ interface Props {
 }
 
 export const TodosForm: React.FC<Props> = ({ query, setQuery, addPost }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  //const [isLoading, setIsLoading] = useState(false);
 
   return (
     <form
       onSubmit={event => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         const newTodo = {
           title: query.trim(),
@@ -22,7 +21,7 @@ export const TodosForm: React.FC<Props> = ({ query, setQuery, addPost }) => {
         };
 
         event.preventDefault();
-        addPost(newTodo).finally(() => setIsLoading(false));
+        addPost(newTodo);
         setQuery('');
       }}
     >
