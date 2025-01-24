@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Todo } from '../types/Todo';
 
 interface Props {
-  addPost: (newTodo: Omit<Todo, 'id'>) => void;
+  addPost: (newTodo: Omit<Todo, 'id'>) => Promise<void>;
 }
 
 export const Header: React.FC<Props> = ({ addPost }) => {

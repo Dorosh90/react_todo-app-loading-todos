@@ -42,8 +42,8 @@ export const App: React.FC = () => {
     );
   }
 
-  function addPost(newTodo: Omit<Todo, 'id'>) {
-    addTodo(newTodo).then(nT => {
+  function addPost(newTodo: Omit<Todo, 'id'>): Promise<void> {
+    return addTodo(newTodo).then(nT => {
       setTodosList(currentTodos => [...currentTodos, nT]);
     });
   }
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
         <TodoList todos={filteredList()} deletePost={deletePost} />
 
         {/* Hide the footer if there are no todos */}
-        {listOfActiveTodos > 0 && (
+        {todosList.length !== 0 && (
           <TodoFooter
             setFilter={setFilter}
             filter={filter}
