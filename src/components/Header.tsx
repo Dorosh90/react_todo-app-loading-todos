@@ -1,9 +1,12 @@
 import { TodosForm } from './TodosForm';
 import { useState } from 'react';
+import { Todo } from '../types/Todo';
 
-interface Props {}
+interface Props {
+  addPost: (newTodo: Omit<Todo, 'id'>) => void;
+}
 
-export const Header: React.FC<Props> = ({}) => {
+export const Header: React.FC<Props> = ({ addPost }) => {
   const [query, setQuery] = useState('');
 
   return (
@@ -16,7 +19,7 @@ export const Header: React.FC<Props> = ({}) => {
       />
 
       {/* Add a todo on form submit */}
-      <TodosForm query={query} setQuery={setQuery} />
+      <TodosForm query={query} setQuery={setQuery} addPost={addPost} />
     </header>
   );
 };

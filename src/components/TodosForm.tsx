@@ -1,16 +1,24 @@
 import React from 'react';
+import { Todo } from '../types/Todo';
 
 interface Props {
   query: string;
   setQuery: (event: string) => void;
+  addPost: (newTodo: Omit<Todo, 'id'>) => void;
 }
 
-export const TodosForm: React.FC<Props> = ({ query, setQuery }) => {
+export const TodosForm: React.FC<Props> = ({ query, setQuery, addPost }) => {
   return (
     <form
       onSubmit={event => {
+        const newTodo = {
+          title: query.trim(),
+          userId: 1,
+          completed: false,
+        };
+
         event.preventDefault();
-        // addTodo();
+        addPost(newTodo);
         setQuery('');
       }}
     >

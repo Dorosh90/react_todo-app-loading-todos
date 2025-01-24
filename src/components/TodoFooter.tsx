@@ -1,24 +1,20 @@
 import classNames from 'classnames';
 import React from 'react';
-import { Todo } from '../types/Todo';
 interface Props {
   setFilter: (filter: string) => void;
   filter: string;
   listOfActiveTodos: number;
-  todosList: Todo[];
 }
 
-export const Footer: React.FC<Props> = ({
+export const TodoFooter: React.FC<Props> = ({
   setFilter,
   filter,
   listOfActiveTodos,
-  todosList
 }) => {
-
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {listOfActiveTodos}
+        {listOfActiveTodos} items left
       </span>
 
       {/* Active link should have the 'selected' class */}

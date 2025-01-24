@@ -1,30 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { getTodos, deleteTodo } from './api/todos';
+import { getTodos, deleteTodo, addTodo } from './api/todos';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
-import { Footer } from './components/Footer';
+import { TodoFooter } from './components/TodoFooter';
 import { Todo } from './types/Todo';
 import { ErrorMessage } from './components/ErrorMessage';
+
+export enum TypeFilter {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
 
 export const App: React.FC = () => {
   const [todosList, setTodosList] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [filter, setFilter] = useState('All');
 
-  const listOfActiveTodos = todosList.length;
-
-  function deletePost(
-    postId: number,
-    setLoading: (isLoading: boolean) => void,
-  ) {
-    setLoading(true);
-
-    deleteTodo(postId)
-      .then(() =>
-        setTodosList(todos => todos.filter(todo => todo.id !== postId)),
-      )
-      .finally(() => setLoading(false));
-  }
+  const listOfActiveTodos = todosList.filter(todo => !todo.completed).length;
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -43,11 +36,23 @@ export const App: React.FC = () => {
     };
   }, []);
 
+  function deletePost(postId: number): Promise<void> {
+    return deleteTodo(postId).then(() =>
+      setTodosList(todos => todos.filter(todo => todo.id !== postId)),
+    );
+  }
+
+  function addPost(newTodo: Omit<Todo, 'id'>) {
+    addTodo(newTodo).then(nT => {
+      setTodosList(currentTodos => [...currentTodos, nT]);
+    });
+  }
+
   const filteredList = () => {
     switch (filter) {
-      case 'Active':
+      case TypeFilter.Active:
         return todosList.filter(todo => !todo.completed);
-      case 'Completed':
+      case TypeFilter.Completed:
         return todosList.filter(todo => todo.completed);
       default:
         return todosList;
@@ -63,17 +68,18 @@ export const App: React.FC = () => {
       <h1 className="todoapp__title">todos</h1>
 
       <div className="todoapp__content">
-        <Header />
+        <Header addPost={addPost} />
 
         <TodoList todos={filteredList()} deletePost={deletePost} />
 
         {/* Hide the footer if there are no todos */}
-        <Footer
-          setFilter={setFilter}
-          filter={filter}
-          listOfActiveTodos={listOfActiveTodos}
-          todosList={todosList}
-        />
+        {listOfActiveTodos > 0 && (
+          <TodoFooter
+            setFilter={setFilter}
+            filter={filter}
+            listOfActiveTodos={listOfActiveTodos}
+          />
+        )}
       </div>
 
       {/* DON'T use conditional rendering to hide the notification */}

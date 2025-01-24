@@ -5,10 +5,7 @@ import { Loading } from './Loading';
 
 interface Props {
   todo: Todo;
-  deletePost: (
-    postId: number,
-    setLoading: (isLoading: boolean) => void,
-  ) => void;
+  deletePost: (postId: number) => Promise<void>;
 }
 
 export const TodoItem: React.FC<Props> = ({ todo, deletePost }) => {
@@ -27,8 +24,7 @@ export const TodoItem: React.FC<Props> = ({ todo, deletePost }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          readOnly
-          // checked={todo.completed}
+          checked={todo.completed}
         />
       </label>
       <span data-cy="TodoTitle" className="todo__title">
@@ -40,13 +36,14 @@ export const TodoItem: React.FC<Props> = ({ todo, deletePost }) => {
         className="todo__remove"
         data-cy="TodoDelete"
         onClick={() => {
-          deletePost(todo.id, setIsLoading);
+          setIsLoading(true);
+          deletePost(todo.id).finally(() => setIsLoading(false));
         }}
       >
         ×
       </button>
       {/* overlay will cover the todo while it is being deleted or updated */}
-      {isLoading && <Loading />}
+      <Loading isLoading={isLoading} />
     </div>
   );
 };

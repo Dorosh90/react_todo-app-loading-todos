@@ -4,10 +4,7 @@ import { TodoItem } from './TodoItem';
 
 interface Props {
   todos: Todo[];
-  deletePost: (
-    postId: number,
-    setLoading: (isLoading: boolean) => void,
-  ) => void;
+  deletePost: (postId: number) => Promise<void>;
 }
 
 export const TodoList: React.FC<Props> = ({ todos, deletePost }) => {
